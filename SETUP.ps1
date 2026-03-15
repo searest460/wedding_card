@@ -1,10 +1,12 @@
 # Perfect setup script with mapping
 $root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
-$jsPath = "$root\assets\index-BBIwAgSn.js"
+$jsPath = "$root\assets\index-v2.js"
+$cssPath = "$root\assets\index-v2.css"
 $htmlPath = "$root\index.html"
 
 Write-Host "[1/4] Loading files..."
 $c = [System.IO.File]::ReadAllText("$root\original_clean.js", [System.Text.Encoding]::UTF8)
+$css = [System.IO.File]::ReadAllText("$root\assets\index-bYuRLTYZ.css", [System.Text.Encoding]::UTF8)
 $translations = [System.IO.File]::ReadAllText("$root\translations.json", [System.Text.Encoding]::UTF8)
 $transObj = $translations | ConvertFrom-Json
 $en = $transObj.en
@@ -70,6 +72,7 @@ $c = $c.Replace('e("transport.rsvpNote")', '"' + $en.'transport.rsvpNote' + '"')
 
 Write-Host "[4/4] Saving files..."
 [System.IO.File]::WriteAllText($jsPath, $c, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText($cssPath, $css, [System.Text.Encoding]::UTF8)
 
 $html = @"
 <!doctype html>
@@ -80,8 +83,8 @@ $html = @"
   <title>Dhanya & Rahul Wedding</title>
   <meta name="description" content="Wedding Invitation | Dhanya & Rahul | September 13, 2026">
   <meta property="og:title" content="Dhanya & Rahul Wedding">
-  <script type="module" crossorigin src="/assets/index-BBIwAgSn.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-bYuRLTYZ.css">
+  <script type="module" crossorigin src="/assets/index-v2.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-v2.css">
 </head>
 <body>
   <div id="root"></div>
