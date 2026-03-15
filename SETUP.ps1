@@ -1,4 +1,4 @@
-# Perfection setup script - Final Version
+# Final ultra-robust setup script
 $root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
 $jsPath = "$root\assets\index-BBIwAgSn.js"
 $cssPath = "$root\assets\index-bYuRLTYZ.css"
@@ -27,11 +27,12 @@ $c = $c.Replace('Sam', 'Rahul')
 $c = $c.Replace('SAM', 'RAHUL')
 $c = $c.Replace('SOFIA', 'DHANYA')
 
-# 2. Dates - Including the scratch card array
+# 2. Dates & Countdown
 $c = $c.Replace('["10","Sept","2027"]', '["13","Sept","2026"]')
 $c = $c.Replace('September 10, 2027', 'September 13, 2026')
 $c = $c.Replace('2026-09-06', '2026-09-13')
 $c = $c.Replace('20260904/20260907', '20260913/20260914')
+$c = $c.Replace('new Date("2026-10-31T16:30:00")', 'new Date("2026-09-13T10:00:00")')
 
 # 3. Venue - All parts
 $c = $c.Replace('Villa Medicea di Artimino', 'Akhil Convention Centre')
@@ -39,7 +40,43 @@ $c = $c.Replace('Via di Papa Leone X, 28', 'Shankaramangalam Koyivila Rd')
 $c = $c.Replace('Artimino, Florencia', 'Thevalakkara, Kerala')
 $c = $c.Replace('Moutiers-Sainte-Marie, France', 'Kollam, Kerala')
 
-# 4. Inject main translations (aggressive replacement of keys)
+# 4. Remove Extra Badge (marked in screenshot)
+# Pattern matches the brown badge near the venue illustration
+$badgePattern = 'f\.jsx\(z\.div,\{initial:\{opacity:0,scale:\.8\},whileInView:\{opacity:1,scale:1\},transition:\{duration:\.5,delay:\.6\},viewport:\{once:!0\},className:"absolute -top-2 -right-2 md:top-0 md:right-0 z-10",children:f\.jsx\("div",\{className:"px-3 py-1\.5 rounded-full shadow-md text-center",style:\{backgroundColor:"#5C2018",maxWidth:"140px"\},children:f\.jsx\("span",\{className:"font-body text-\[9px\] md:text-\[10px\] tracking-wide text-white leading-tight block",children:e\("saveTheDate\.extraBadge"\)\}\)\}\)\}\)'
+$c = $c -replace $badgePattern, 'null'
+
+# 5. Remove "Please avoid wearing white" (marked in screenshot)
+$avoidWhitePattern = 'f\.jsx\(z\.div,\{initial:\{opacity:0,y:30\},whileInView:\{opacity:1,y:0\},transition:\{duration:\.8,ease:"easeOut",delay:.8\},viewport:\{once:!0\},className:"text-center",children:f\.jsx\("p",\{className:"font-script text-2xl md:text-3xl",style:\{color:"#5C2018"\},children:e\("dressCode\.avoidWhite"\)\}\)\}\)'
+$c = $c -replace $avoidWhitePattern, 'null'
+
+# 6. Replace Menu with Wedding Events (marked in screenshot)
+# We build a custom block for events
+$eventsBlock = @"
+f.jsxs("div",{className:"space-y-8 py-4",children:[
+    f.jsxs("div",{className:"text-center",children:[
+        f.jsx("h3",{className:"font-display text-sm tracking-widest uppercase mb-1",style:{color:"#5C2018"},children:"Mehndi"}),
+        f.jsx("p",{className:"font-body text-xs",style:{color:"#5C2018"},children:"September 11, 2026 | 3:00 PM"}),
+        f.jsx("p",{className:"font-body text-[10px] italic",style:{color:"#5C2018"},children:"Akhil Convention Centre"})
+    ]}),
+    f.jsxs("div",{className:"text-center",children:[
+        f.jsx("h3",{className:"font-display text-sm tracking-widest uppercase mb-1",style:{color:"#5C2018"},children:"Podva & Sangeet"}),
+        f.jsx("p",{className:"font-body text-xs",style:{color:"#5C2018"},children:"September 12, 2026 | 5:00 PM"}),
+        f.jsx("p",{className:"font-body text-[10px] italic",style:{color:"#5C2018"},children:"Akhil Convention Centre"})
+    ]}),
+    f.jsxs("div",{className:"text-center",children:[
+        f.jsx("h3",{className:"font-display text-sm tracking-widest uppercase mb-1",style:{color:"#5C2018"},children:"Wedding (Saat Phere)"}),
+        f.jsx("p",{className:"font-body text-xs",style:{color:"#5C2018"},children:"September 13, 2026 | 10:00 AM"}),
+        f.jsx("p",{className:"font-body text-[10px] italic",style:{color:"#5C2018"},children:"Akhil Convention Centre"})
+    ]})
+]})
+"@
+$eventsBlock = $eventsBlock.Replace("`r`n", "").Replace("    ", "")
+
+# This pattern matches the entire Italian menu container
+$menuPattern = 'f\.jsx\("div",\{className:"bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-xl border border-[#5C2018]/10 max-w-lg mx-auto relative z-10",children:f\.jsxs\("div",\{className:"space-y-8",children:\[f\.jsxs\(z\.div,\{initial:\{opacity:0,y:10\},whileInView:\{opacity:1,y:0\},transition:\{duration:\.5,delay:\.4\},viewport:\{once:!0\},className:"text-center",children:\[f\.jsx\("h3",\{className:"font-display text-xs md:text-sm tracking-\[0\.2em\] uppercase mb-1",style:\{color:"#5C2018"\},children:"Aperitivo"\}[\s\S]*?\}\)\]\}\)\]\}\)\}\)'
+$c = $c -replace $menuPattern, ('f.jsx("div",{className:"bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-xl border border-[#5C2018]/10 max-w-lg mx-auto relative z-10",children:' + $eventsBlock + '})')
+
+# 7. Translations
 $c = $c.Replace('s("demo.title")', '"' + (Escape-JSString $en.'intro.invitation') + '"')
 $c = $c.Replace('s("demo.buyNow")', '"' + (Escape-JSString $en.'intro.personalMessage') + '"')
 $c = $c.Replace('e("dressCode.title")', '"' + (Escape-JSString $en.'dressCode.title') + '"')
@@ -55,14 +92,7 @@ $c = $c.Replace('e("transport.howToGet")', '"' + (Escape-JSString $en.'transport
 $c = $c.Replace('e("transport.departure")', '"' + (Escape-JSString $en.'transport.departure') + '"')
 $c = $c.Replace('e("transport.rsvpNote")', '"' + (Escape-JSString $en.'transport.rsvpNote') + '"')
 
-# 5. REMOVALS (Per user request)
-# Remove Header Left (FV) and Language Switcher (VV) from main layout
-$c = $c.Replace('f.jsxs("main",{className:"bg-white",children:[f.jsx(FV,{}),f.jsx(VV,{}),', 'f.jsxs("main",{className:"bg-white",children:[null,null,')
-
-# Remove Gifts section (V$) from main layout
-$c = $c.Replace('f.jsx($$,{}),f.jsx(V$,{}),', 'f.jsx($$,{}),null,')
-
-# 6. RSVP Sections (jV and IV objects)
+# 8. RSVP Sections (jV and IV objects)
 $c = $c.Replace('thankYou:"Confirm your attendance"', 'thankYou:"' + (Escape-JSString $en.'rsvp.title') + '"')
 $c = $c.Replace('thankYouConfirming:"Thank you for confirming"', 'thankYouConfirming:"' + (Escape-JSString $en.'rsvp.title') + '"')
 $c = $c.Replace('fullName:"Full name *"', 'fullName:"' + (Escape-JSString $en.'rsvp.fullName') + '"')
