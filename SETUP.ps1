@@ -1,4 +1,4 @@
-# Absolute perfection setup script - v3
+# Absolute perfection setup script - v4
 $root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
 $jsPath = "$root\assets\index-BBIwAgSn.js"
 $cssPath = "$root\assets\index-bYuRLTYZ.css"
@@ -18,7 +18,14 @@ function Escape-JSString($s) {
     return $s.ToString().Replace('\', '\\').Replace('"', '\"').Replace("`n", '\n').Replace("`r", '')
 }
 
-# 1. Names - Global & Aggressive
+# 1. Names - Extremely Aggressive & Global
+# Replace the specific "Sam & Sofía" variations found in the file
+$c = $c -replace 'Sam & Sofía', 'Rahul & Dhanya'
+$c = $c -replace 'Sam & Sofia', 'Rahul & Dhanya'
+$c = $c -replace 'SAM & SOFIA', 'RAHUL & DHANYA'
+$c = $c -replace 'Sam & Sof├¡a', 'Rahul & Dhanya'
+
+# Standalone name replacements
 $c = $c.Replace('Matthias', 'Rahul')
 $c = $c.Replace('Flora', 'Dhanya')
 $c = $c.Replace('Sofia', 'Dhanya')
@@ -27,11 +34,9 @@ $c = $c.Replace('Sam', 'Rahul')
 $c = $c.Replace('SAM', 'RAHUL')
 $c = $c.Replace('SOFIA', 'DHANYA')
 
-# Aggressive encoded replacements
-$c = $c -replace 'Sof\\u00EDa', 'Dhanya'
-$c = $c -replace 'Sof\\xEDa', 'Dhanya'
-$c = $c -replace '"Sofía"', '"Dhanya"'
-$c = $c -replace '"Sofia"', '"Dhanya"'
+# Aggressive regex for any variation of Sofia/Sofía
+$c = $c -replace '\bSof[iaí]+a\b', 'Dhanya'
+$c = $c -replace '\bSOF[IAÍ]+A\b', 'DHANYA'
 
 # 2. Dates & Countdown
 $c = $c.Replace('["10","Sept","2027"]', '["13","Sept","2026"]')
