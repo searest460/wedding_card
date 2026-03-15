@@ -55,7 +55,14 @@ $c = $c.Replace('e("transport.howToGet")', '"' + (Escape-JSString $en.'transport
 $c = $c.Replace('e("transport.departure")', '"' + (Escape-JSString $en.'transport.departure') + '"')
 $c = $c.Replace('e("transport.rsvpNote")', '"' + (Escape-JSString $en.'transport.rsvpNote') + '"')
 
-# 5. RSVP Sections (jV and IV objects)
+# 5. REMOVALS (Per user request)
+# Remove Header Left (FV) and Language Switcher (VV) from main layout
+$c = $c.Replace('f.jsxs("main",{className:"bg-white",children:[f.jsx(FV,{}),f.jsx(VV,{}),', 'f.jsxs("main",{className:"bg-white",children:[null,null,')
+
+# Remove Gifts section (V$) from main layout
+$c = $c.Replace('f.jsx($$,{}),f.jsx(V$,{}),', 'f.jsx($$,{}),null,')
+
+# 6. RSVP Sections (jV and IV objects)
 $c = $c.Replace('thankYou:"Confirm your attendance"', 'thankYou:"' + (Escape-JSString $en.'rsvp.title') + '"')
 $c = $c.Replace('thankYouConfirming:"Thank you for confirming"', 'thankYouConfirming:"' + (Escape-JSString $en.'rsvp.title') + '"')
 $c = $c.Replace('fullName:"Full name *"', 'fullName:"' + (Escape-JSString $en.'rsvp.fullName') + '"')
