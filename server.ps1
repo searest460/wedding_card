@@ -1,5 +1,5 @@
 # Simple robust server
-$port = 8088
+$port = 8089
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$port/")
 $listener.Start()
