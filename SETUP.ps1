@@ -1,4 +1,4 @@
-# Final perfect setup script with mapping
+# Absolute final perfect setup script
 $root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
 $jsPath = "$root\assets\index-v2.js"
 $cssPath = "$root\assets\index-v2.css"
@@ -13,23 +13,29 @@ $en = $transObj.en
 
 Write-Host "[2/4] Mapping translations to JS keys..."
 
-# Update couple names everywhere
-$c = $c -replace 'couple_name_1\)\|\|"Matthias"', ('couple_name_1)||"Rahul"')
-$c = $c -replace 'couple_name_2\)\|\|"Flora"', ('couple_name_2)||"Dhanya"')
-$c = $c.Replace('children:"Matthias"', 'children:"Rahul"')
-$c = $c.Replace('children:"Flora"', 'children:"Dhanya"')
+# 1. Couple Names (All variations)
+$c = $c -replace 'couple_name_1\)\|\|"[^"]*"', ('couple_name_1)||"Rahul"')
+$c = $c -replace 'couple_name_2\)\|\|"[^"]*"', ('couple_name_2)||"Dhanya"')
+$c = $c -replace 'children:"Matthias"', 'children:"Rahul"'
+$c = $c -replace 'children:"Flora"', 'children:"Dhanya"'
+$c = $c -replace 'children:"Sofia"', 'children:"Dhanya"'
+$c = $c -replace 'children:"Sofía"', 'children:"Dhanya"'
+$c = $c -replace 'children:"Sam"', 'children:"Rahul"'
+$c = $c -replace 'children:"SAM"', 'children:"RAHUL"'
+$c = $c -replace 'children:"SOFIA"', 'children:"DHANYA"'
+$c = $c -replace 'children:"SOF\xCDA"', 'children:"DHANYA"' # Handle encoded characters
 
-# Update Venue
-$c = $c.Replace('children:"Villa Medicea di Artimino"', ('children:"' + $en.'transport.description' + '"'))
-$c = $c.Replace('children:"Via di Papa Leone X, 28"', 'children:""')
-$c = $c.Replace('children:"Artimino, Florencia"', 'children:""')
-$c = $c.Replace('children:"September 10, 2027"', 'children:"September 13, 2026"')
+# 2. Venue and Dates
+$c = $c -replace 'children:"Villa Medicea di Artimino"', ('children:"' + $en.'transport.description' + '"')
+$c = $c -replace 'children:"Via di Papa Leone X, 28"', 'children:""'
+$c = $c -replace 'children:"Artimino, Florencia"', 'children:""'
+$c = $c -replace 'children:"September 10, 2027"', 'children:"September 13, 2026"'
+$c = $c.Replace('2026-09-06', '2026-09-13')
+$c = $c.Replace('20260904/20260907', '20260913/20260914')
 
-# Update jV object (RSVP confirmation)
-$c = $c -replace 'thankYou:"Thank you"', ('thankYou:"' + $en.'rsvp.title' + '"')
-$c = $c -replace 'seeYou:".*?"', ('seeYou:"We''ll see you on September 13 at ' + $en.'transport.description' + '"')
-
-# Update IV object (RSVP form)
+# 3. RSVP Section (jV and IV objects)
+$c = $c -replace 'thankYou:"[^"]*"', ('thankYou:"' + $en.'rsvp.title' + '"')
+$c = $c -replace 'seeYou:"[^"]*"', ('seeYou:"We''ll see you on September 13 at ' + $en.'transport.description' + '"')
 $c = $c -replace 'subtitle:"Confirm your attendance"', ('subtitle:"' + $en.'rsvp.subtitle' + '"')
 $c = $c -replace 'fullName:"Full Name"', ('fullName:"' + $en.'rsvp.fullName' + '"')
 $c = $c -replace 'email:"Email \(optional\)"', ('email:"' + $en.'rsvp.email' + '"')
@@ -38,13 +44,10 @@ $c = $c -replace 'yes:"Yes, I''ll be there!"', ('yes:"' + $en.'rsvp.yesButton' +
 $c = $c -replace 'no:"No, I can''t make it"', ('no:"' + $en.'rsvp.noButton' + '"')
 $c = $c -replace 'guestCount:"How many guests in total\?"', ('guestCount:"' + $en.'rsvp.guestCount' + '"')
 $c = $c -replace 'dietaryTitle:"Your dietary requirements"', ('dietaryTitle:"' + $en.'rsvp.dietary' + '"')
-$c = $c -replace 'dietaryHelp:".*?"', ('dietaryHelp:"' + $en.'rsvp.dietaryPlaceholder' + '"')
-$c = $c -replace 'messageLabel:".*?"', ('messageLabel:"' + $en.'rsvp.messageLabel' + '"')
-$c = $c -replace 'messagePlaceholder:".*?"', ('messagePlaceholder:"' + $en.'rsvp.messagePlaceholder' + '"')
 $c = $c -replace 'sending:"Sending\.\.\."', ('sending:"' + $en.'rsvp.sending' + '"')
 $c = $c -replace 'send:"Confirm"', ('send:"' + $en.'rsvp.send' + '"')
 
-# Global name replacement with word boundaries
+# 4. Global Name Replacement (Aggressive regex)
 $c = $c -replace '\bSofia\b', 'Dhanya'
 $c = $c -replace '\bSofía\b', 'Dhanya'
 $c = $c -replace '\bSOFIA\b', 'DHANYA'
@@ -52,7 +55,7 @@ $c = $c -replace '\bSOFÍA\b', 'DHANYA'
 $c = $c -replace '\bSam\b', 'Rahul'
 $c = $c -replace '\bSAM\b', 'RAHUL'
 
-Write-Host "[3/4] Injecting main translations..."
+Write-Host "[3/4] Injecting main translations (s and e calls)..."
 $c = $c.Replace('s("demo.title")', '"' + $en.'intro.invitation' + '"')
 $c = $c.Replace('s("demo.buyNow")', '"' + $en.'intro.personalMessage' + '"')
 $c = $c.Replace('e("dressCode.title")', '"' + $en.'dressCode.title' + '"')
