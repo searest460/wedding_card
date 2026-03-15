@@ -1,7 +1,7 @@
-# Simple robust setup script
+# Final ultra-robust setup script
 $root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
-$jsPath = "$root\assets\index-v2.js"
-$cssPath = "$root\assets\index-v2.css"
+$jsPath = "$root\assets\index-BBIwAgSn.js"
+$cssPath = "$root\assets\index-bYuRLTYZ.css"
 $htmlPath = "$root\index.html"
 
 Write-Host "Loading original files..."
@@ -26,8 +26,7 @@ $c = $c.Replace('Via di Papa Leone X, 28', '')
 $c = $c.Replace('Artimino, Florencia', '')
 $c = $c.Replace('2026-09-06', '2026-09-13')
 
-# Inject main translations by replacing the s("...") and e("...") calls
-# We'll do this aggressively
+# Translations
 $c = $c.Replace('s("demo.title")', '"' + $en.'intro.invitation' + '"')
 $c = $c.Replace('s("demo.buyNow")', '"' + $en.'intro.personalMessage' + '"')
 $c = $c.Replace('e("dressCode.title")', '"' + $en.'dressCode.title' + '"')
@@ -43,9 +42,8 @@ $c = $c.Replace('e("transport.howToGet")', '"' + $en.'transport.howToGet' + '"')
 $c = $c.Replace('e("transport.departure")', '"' + $en.'transport.departure' + '"')
 $c = $c.Replace('e("transport.rsvpNote")', '"' + $en.'transport.rsvpNote' + '"')
 
-# Save files
+# Save files using original names
 [System.IO.File]::WriteAllText($jsPath, $c, [System.Text.Encoding]::UTF8)
-[System.IO.File]::WriteAllText($cssPath, $css, [System.Text.Encoding]::UTF8)
 
 $html = @"
 <!doctype html>
@@ -54,8 +52,8 @@ $html = @"
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dhanya & Rahul Wedding</title>
-  <script type="module" src="/assets/index-v2.js"></script>
-  <link rel="stylesheet" href="/assets/index-v2.css">
+  <script type="module" crossorigin src="/assets/index-BBIwAgSn.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-bYuRLTYZ.css">
 </head>
 <body>
   <div id="root"></div>
