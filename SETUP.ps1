@@ -3,7 +3,7 @@
 # Robust Version: Uses translations.json for UTF-8 support
 # =============================================================
 
-$root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com\theatre-demo.thedigitalyes.com"
+$root = "c:\Users\Rahuldev\Downloads\theatre_demo.thedigitalyes.com"
 $jsPath = "$root\assets\index-BBIwAgSn.js"
 $translationsPath = "$root\translations.json"
 
@@ -166,5 +166,5 @@ $html = @"
 Write-Host "      Done."
 Write-Host ""
 Write-Host "=============================================="
-Write-Host " ALL DONE! Open http://localhost:8080"
+Write-Host " ALL DONE! Open http://localhost:8081"
 Write-Host "=============================================="

@@ -8,7 +8,7 @@ try {
         $request = $context.Request
         $response = $context.Response
         $path = $request.Url.LocalPath.TrimStart('/')
-        if ($path -eq '') { $path = 'index.html' }
+        if ($path -eq '' -or $path -eq 'theatre-demo.thedigitalyes.com/') { $path = 'index.html' }
         $fullPath = Join-Path $PWD $path
         
         Write-Host "Requested: $path"
