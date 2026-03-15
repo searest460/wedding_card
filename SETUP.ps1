@@ -173,6 +173,7 @@ $html = @"
 "@
 # 5. Write the final files
 [System.IO.File]::WriteAllText($jsPath, $c, [System.Text.Encoding]::UTF8)
+$html = $html.Replace('<script type="module" crossorigin src="./assets/index-BBIwAgSn.js"></script>', "<script type=`"module`" crossorigin src=`"./assets/index-BBIwAgSn.js`"></script>")
 [System.IO.File]::WriteAllText("$root\index.html", $html, [System.Text.Encoding]::UTF8)
 Write-Host "      Done."
 Write-Host ""
